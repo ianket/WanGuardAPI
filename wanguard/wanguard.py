@@ -9,9 +9,15 @@ class WanGuard:
         self._username = username
         self._password = password
 
-    def get_anomalies(self, from_date):
-        return requests.get(self._url + "/wanguard-api/v1/anomalies?from=%s" % from_date,
-                            auth=HTTPBasicAuth(self._username, self._password)).json()
+    def get_anomalies(self, from_date=None):
+        url = self._url + "/wanguard-api/v1/anomalies"
+        if from_date:
+            url += "?from_date=%s" % from_date
+        return requests.get(url, auth=HTTPBasicAuth(self._username, self._password)).json()
+
+    def get_anomaly(self, id):
+        url = self._url + "/wanguard-api/v1/anomalies/%s" % (str(id))
+        return requests.get(url, auth=HTTPBasicAuth(self._username, self._password)).json()
 
     def get_top_flow(self, from_date):
         return requests.get(
